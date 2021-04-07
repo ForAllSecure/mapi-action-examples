@@ -43,7 +43,7 @@ In GitHub actions, those steps translate to:
 
     # Run Mayhem for API
     - name: Run Mayhem for API to check for vulnerabilities
-      uses: ForAllSecure/mapi-action@v1.0.0
+      uses: ForAllSecure/mapi-action@v1
       with:
         mapi-token: ${{ secrets.MAPI_TOKEN }}
         api-url: http://localhost:8000
@@ -68,7 +68,7 @@ To artifact the report in your build, add this step to your pipeline:
 
 ```yaml
 - name: Run Mayhem for API to check for vulnerabilities
-  uses: ForAllSecure/mapi-action@v1.0.0
+  uses: ForAllSecure/mapi-action@v1
   continue-on-error: true
   with:
     mapi-token: ${{ secrets.MAPI_TOKEN }}
@@ -97,7 +97,7 @@ step to your pipeline:
 
 ```yaml
 - name: Run Mayhem for API to check for vulnerabilities
-  uses: ForAllSecure/mapi-action@v1.0.0
+  uses: ForAllSecure/mapi-action@v1
   continue-on-error: true
   with:
     mapi-token: ${{ secrets.MAPI_TOKEN }}
