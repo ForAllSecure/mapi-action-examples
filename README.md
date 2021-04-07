@@ -1,6 +1,6 @@
 # Mayhem for API: Example CI integration
 
-[![Mayhem for API](https://mayhem4api.forallsecure.com/static/media/logo.f8497128.svg)](http://mayhem4api.forallsecure.com/signup)
+[![Mayhem for API](https://mayhem4api.forallsecure.com/downloads/img/mapi-logo-full-color.svg)](http://mayhem4api.forallsecure.com/signup)
 
 ## About Mayhem for API
 
