@@ -11,12 +11,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    # Download Mayhem for API CLI for linux (also available for windows and MAC
-    - name: Download API fuzzer CLI
-      run: |
-        curl -s -LO https://mayhem4api.forallsecure.com/downloads/cli/latest/linux-musl/mapi
-        chmod +x ./mapi
-
     # Create environment to run API
     - name: Set up Python
       uses: actions/setup-python@v1
@@ -33,21 +27,26 @@ jobs:
       run: uvicorn src.main:app &
 
     # Run Mayhem for API
-    - name: Mayhem for API Scan
-      env:
-        MAPI_TOKEN: ${{ secrets.MAPI_TOKEN }}
-      run: ./mapi run fastapi 10 --url http://localhost:8000/ --sarif results.sarif --html results.html http://localhost:8000/openapi.json || true
+    - name: Run Mayhem for API to check for vulnerabilities
+      uses: ForAllSecure/mapi-action@v1.0.0
+      continue-on-error: true
+      with:
+        mapi-token: ${{ secrets.MAPI_TOKEN }}
+        api-url: http://localhost:8000
+        api-spec: http://localhost:8000/openapi.json
+        sarif-report: mapi.sarif
+        html-report: mapi.html
 
     # Archive HTML report
-    - name: Archive code coverage results
+    - name: Archive Mayhem for API report
       uses: actions/upload-artifact@v2
       with:
         name: mapi-report
-        path: results.html
+        path: mapi.html
 
     # Upload SARIF file (only available on public repos or github enterprise)
     - name: Upload SARIF file
       uses: github/codeql-action/upload-sarif@v1
       with:
-        sarif_file: results.sarif
+        sarif_file: mapi.sarif
 

@@ -28,19 +28,12 @@ for API.
 ### Starting a Mayhem for API scan in Github Actions
 
 To scan your API with Mayhem for API in CI, you need to:
-1) Download the Mayhem for API CLI
-2) Start your API
-3) Start the Mayhem for API scan
+1) Start your API
+2) Start the Mayhem for API scan
 
 In GitHub actions, those steps translate to:
 
 ```yaml
-    # Download Mayhem for API CLI for linux (also available for windows and Mac
-    - name: Download API fuzzer CLI
-      run: |
-        curl -s -LO https://mayhem4api.forallsecure.com/downloads/cli/latest/linux-musl/mapi
-        chmod +x ./mapi
-
     # Run API in test mode. We configured test mode to output stacktraces in
     # the error responses to improve the output of Mayhem for API.
     - name: Run API
@@ -49,51 +42,74 @@ In GitHub actions, those steps translate to:
       run: uvicorn src.main:app &
 
     # Run Mayhem for API
-    - name: Mayhem for API Scan
-      env:
-        MAPI_TOKEN: ${{ secrets.MAPI_TOKEN }}
-      run: ./mapi run fastapi 10 --url http://localhost:8000/ --sarif results.sarif --html results.html http://localhost:8000/openapi.json || true
+    - name: Run Mayhem for API to check for vulnerabilities
+      uses: ForAllSecure/mapi-action@v1.0.0
+      with:
+        mapi-token: ${{ secrets.MAPI_TOKEN }}
+        api-url: http://localhost:8000
+        api-spec: http://localhost:8000/openapi.json
 ```
 
 This repo contains a [full example](.github/workflows/mapi.yml) for
 reference.
 
-## Results
+# Reports
 
-Mayhem for API outputs reports in multiple formats (jUnit, SARIF, HTML).
-In this instance, we requested a HTML report and a SARIF report.
+Mayhem for API generate reports when you pass `sarif-report` or
+`html-report` to the input. Make sure to pass `continue-on-error` to the
+Mayhem for API step if you want to process the reports in follow-up
+steps.
 
-### Artifact HTML Report
+## Artifact HTML Report
 
 ![HTML Report](https://mayhem4api.forallsecure.com/downloads/img/sample-report.png)
 
 To artifact the report in your build, add this step to your pipeline:
 
 ```yaml
-    # Archive HTML report
-    - name: Archive code coverage results
-      uses: actions/upload-artifact@v2
-      with:
-        name: mapi-report
-        path: results.html
+- name: Run Mayhem for API to check for vulnerabilities
+  uses: ForAllSecure/mapi-action@v1.0.0
+  continue-on-error: true
+  with:
+    mapi-token: ${{ secrets.MAPI_TOKEN }}
+    api-url: http://localhost:8000 # <- update this
+    api-spec: your-openapi-spec-or-postman-collection.json # <- update this
+    html-report: mapi.html
+
+# Archive HTML report
+- name: Archive Mayhem for API report
+  uses: actions/upload-artifact@v2
+  with:
+    name: mapi-report
+    path: mapi.html
 ```
 
-## Upload SARIF
+## GitHub Code Scanning support
 
 ![Mayhem for API issue in your
 PR](http://mayhem4api.forallsecure.com/downloads/img/sarif-github.png)
 
-Uploading SARIF to GitHub allows you to see any issue found by Mayhem
-for API right on your PR! This currently requires you to have a GitHub
-Enterprise Plan or have a public repository. To upload the SARIF report,
-add this step to your pipeline:
+Uploading SARIF reports to GitHub allows you to see any issue found by
+Mayhem for API right on your PR, as well as in the "Security" tab of
+your repository. This currently requires you to have a GitHub Enterprise
+Plan or have a public repository. To upload the SARIF report, add this
+step to your pipeline:
 
 ```yaml
-    # Upload SARIF file (only available on public repos or github enterprise)
-    - name: Upload SARIF file
-      uses: github/codeql-action/upload-sarif@v1
-      with:
-        sarif_file: results.sarif
+- name: Run Mayhem for API to check for vulnerabilities
+  uses: ForAllSecure/mapi-action@v1.0.0
+  continue-on-error: true
+  with:
+    mapi-token: ${{ secrets.MAPI_TOKEN }}
+    api-url: http://localhost:8000 # <- update this
+    api-spec: your-openapi-spec-or-postman-collection.json # <- update this
+    sarif-report: mapi.sarif
+
+# Upload SARIF file (only available on public repos or github enterprise)
+- name: Upload SARIF file
+  uses: github/codeql-action/upload-sarif@v1
+  with:
+    sarif_file: mapi.sarif
 ```
 
 If your API server sends back stacktraces in the 500 Internal Server
