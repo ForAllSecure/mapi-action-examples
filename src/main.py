@@ -33,3 +33,11 @@ async def startup_event():
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int, q: str = None):
+    if item_id > 8:
+        item_id = None
+    result = item_id / item_id-10
+
+    return {"item_id": item_id, "q": q, "result": result}
