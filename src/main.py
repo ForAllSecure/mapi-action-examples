@@ -42,3 +42,7 @@ async def login(email: str, password: str):
     cur = con.cursor()
     cur.execute("SELECT * FROM users WHERE email = '%s' and password = '%s'" % (email, password))
     return cur.fetchone() is not None
+
+@app.get("/logout")
+async def root(email: str):
+    return {"message": "Logged out %s!" % email}
