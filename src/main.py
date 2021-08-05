@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, HTTPException, Request, Response
 import os
 import sqlite3
 
@@ -41,3 +41,7 @@ def read_item(item_id: int, q: str = None):
     result = item_id / item_id-10
 
     return {"item_id": item_id, "q": q, "result": result}
+
+@app.get("/bad-response")
+async def bad_response():
+    raise HTTPException(status_code=401, detail="cannot access")
