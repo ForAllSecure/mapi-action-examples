@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, HTTPException, Request, Response
 import os
 import sqlite3
 
@@ -33,3 +33,8 @@ async def startup_event():
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+
+@app.get("/bad-response")
+async def bad_response():
+    raise HTTPException(status_code=401, detail="cannot access")
