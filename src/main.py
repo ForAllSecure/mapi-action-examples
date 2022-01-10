@@ -37,4 +37,4 @@ async def root():
 
 @app.get("/bad-response")
 async def bad_response():
-    raise HTTPException(status_code=401, detail="cannot access")
+    raise HTTPException(status_code=401, detail="cannot access this")
