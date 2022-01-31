@@ -19,8 +19,7 @@ if os.getenv("FASTAPI_ENV") in ["dev", "test"]:
                     etype=type(exc), value=exc, tb=exc.__traceback__
                 )
             )
-        )
-    
+        )    
 
 @app.on_event("startup")
 async def startup_event():
