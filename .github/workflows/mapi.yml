@@ -50,7 +50,6 @@ jobs:
       with:
         name: mapi-sarif
         path: mapi.sarif
-        
 
     # Upload SARIF file (only available on public repos or github enterprise)
     - name: Upload SARIF file
