@@ -19,7 +19,7 @@ if os.getenv("FASTAPI_ENV") in ["dev", "test"]:
                     etype=type(exc), value=exc, tb=exc.__traceback__
                 )
             )
-        )
+        )    
 
 @app.on_event("startup")
 async def startup_event():
@@ -29,7 +29,19 @@ async def startup_event():
     cur.execute('''CREATE TABLE users (email text, password text)''')
     cur.execute('''INSERT INTO users VALUES ('me@me.com', '123456')''')
     con.commit()
+    
 
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+
+@app.get("/login")
+async def login(email: str, password: str):
+    cur = con.cursor()
+    cur.execute("SELECT * FROM users WHERE email = '%s' and password = '%s'" % (email, password))
+    return cur.fetchone() is not None
+
+@app.get("/logout")
+async def root(email: str):
+    return {"message": "Logged out %s!" % email}

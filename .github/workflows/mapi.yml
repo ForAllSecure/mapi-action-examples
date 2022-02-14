@@ -43,10 +43,16 @@ jobs:
       with:
         name: mapi-report
         path: mapi.html
+        
+    # Archive SARIF output
+    - name: Archive Mayhem for API SARIF
+      uses: actions/upload-artifact@v2
+      with:
+        name: mapi-sarif
+        path: mapi.sarif
 
     # Upload SARIF file (only available on public repos or github enterprise)
     - name: Upload SARIF file
       uses: github/codeql-action/upload-sarif@v1
       with:
         sarif_file: mapi.sarif
-
