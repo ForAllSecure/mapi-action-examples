@@ -34,6 +34,10 @@ async def startup_event():
 async def root():
     return {"message": "Hello World"}
 
+@app.get("/user")
+async def root():
+    return {"message": "Hello World"}
+
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: str = None):
     if item_id > 8:
@@ -41,3 +45,13 @@ def read_item(item_id: int, q: str = None):
     result = item_id / item_id-10
 
     return {"item_id": item_id, "q": q, "result": result}
+
+@app.get("/login")
+async def login(email: str, password: str):
+    cur = con.cursor()
+    cur.execute("SELECT * FROM users WHERE email = '%s' and password = '%s'" % (email, password))
+    return cur.fetchone() is not None
+
+@app.get("/logout")
+async def root(email: str):
+    return {"message": "Logged out %s!" % email}
