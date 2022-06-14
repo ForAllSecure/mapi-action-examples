@@ -26,8 +26,8 @@ async def startup_event():
     """Creates an in-memory database with a user table, and populate it with
     one account"""
     cur = con.cursor()
-    cur.execute('''CREATE TABLE users (email text, password text)''')
-    cur.execute('''INSERT INTO users VALUES ('me@me.com', '123456')''')
+    cur.execute('''CREATE TABLE users (email text, password text, name text)''')
+    cur.execute('''INSERT INTO users VALUES ('me@me.com', '123456', 'foo')''')
     con.commit()
 
 @app.get("/")
