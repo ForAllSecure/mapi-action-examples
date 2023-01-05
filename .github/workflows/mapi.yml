@@ -11,11 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     # Create environment to run API
     - name: Set up Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v4
       with:
         python-version: 3.8
     - name: Install dependencies
@@ -41,20 +41,20 @@ jobs:
 
     # Archive HTML report
     - name: Archive Mayhem for API report
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: mapi-report
         path: mapi.html
         
     # Archive SARIF output
     - name: Archive Mayhem for API SARIF
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: mapi-sarif
         path: mapi.sarif
 
     # Upload SARIF file (only available on public repos or github enterprise)
     - name: Upload SARIF file
-      uses: github/codeql-action/upload-sarif@v1
+      uses: github/codeql-action/upload-sarif@v2
       with:
         sarif_file: mapi.sarif
