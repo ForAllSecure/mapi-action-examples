@@ -79,7 +79,7 @@ To artifact the report in your build, add this step to your pipeline:
 
 # Archive HTML report
 - name: Archive Mayhem for API report
-  uses: actions/upload-artifact@v2
+  uses: actions/upload-artifact@v3
   with:
     name: mapi-report
     path: mapi.html
@@ -108,7 +108,7 @@ step to your pipeline:
 
 # Upload SARIF file (only available on public repos or github enterprise)
 - name: Upload SARIF file
-  uses: github/codeql-action/upload-sarif@v1
+  uses: github/codeql-action/upload-sarif@v2
   with:
     sarif_file: mapi.sarif
 ```
