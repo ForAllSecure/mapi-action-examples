@@ -1,0 +1,20 @@
+build-job:
+  stage: build
+  script:
+    - pip install -r requirements.txt 
+
+test-job:
+  stage: test
+  script:
+    - FASTAPI_ENV=test python3 -m uvicorn src.main:app &
+    - curl -Lo mapi https://mayhem4api.forallsecure.com/downloads/cli/latest/linux-musl/mapi && chmod +x mapi
+    - ./mapi login $MAPI_TOKEN
+    - ./mapi run forallsecure-mapi-action-examples auto "http://localhost:8000/openapi.json" --url "http://localhost:8000/" --junit junit.xml --sarif mapi.sarif --html mapi.html
+  artifacts:
+    when: always
+    paths:
+      - junit.xml
+      - mapi.html
+      - mapi.sarif
+    reports:
+      junit: junit.xml
