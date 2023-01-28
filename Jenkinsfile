@@ -23,6 +23,8 @@ pipeline {
                 sh '''
                       ./mapi run forallsecure-mapi-action-examples auto "http://localhost:8000/openapi.json" --url "http://localhost:8000/" --junit junit.xml --sarif mapi.sarif --html mapi.html
                    '''
+                /* Kill python if it's still running, ignoring any errors */
+                sh 'pgrep python3 | xargs kill || true'
             }
             post {
                 always {

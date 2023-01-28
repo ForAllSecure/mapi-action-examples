@@ -20,6 +20,7 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: 3.8
+
     - name: Install dependencies
       run: pip install -r requirements.txt
 
@@ -40,6 +41,10 @@ jobs:
         api-spec: http://localhost:8000/openapi.json
         sarif-report: mapi.sarif
         html-report: mapi.html
+
+    # Kill python if it's still running, ignoring any errors
+    - name: Shut down API
+      run: pgrep python3 | xargs kill || true
 
     # Archive HTML report
     - name: Archive Mayhem for API report
