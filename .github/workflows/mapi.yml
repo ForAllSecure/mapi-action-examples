@@ -27,7 +27,7 @@ jobs:
     # Run API in test mode. We configured test mode to output stacktraces in
     # the error responses to improve the output of Mayhem for API.
     - name: Run API
-      run: python3 -m uvicorn src.run_coverage:app &
+      run: uvicorn src.run_coverage:app &
 
     # Run Mayhem for API
     - name: Run Mayhem for API to check for vulnerabilities
@@ -39,7 +39,7 @@ jobs:
         api-spec: http://localhost:8000/openapi.json
         sarif-report: mapi.sarif
         html-report: mapi.html
-        duration: 600
+        duration: 60
 
     # Kill python if it's still running, ignoring any errors
     - name: Shut down API
