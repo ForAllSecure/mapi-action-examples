@@ -39,6 +39,7 @@ jobs:
         api-spec: http://localhost:8000/openapi.json
         sarif-report: mapi.sarif
         html-report: mapi.html
+        duration: 60
 
     # Kill python if it's still running, ignoring any errors
     - name: Shut down API
