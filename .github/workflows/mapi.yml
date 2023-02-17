@@ -39,27 +39,18 @@ jobs:
         api-spec: http://localhost:8000/openapi.json
         sarif-report: mapi.sarif
         html-report: mapi.html
-        duration: 60
+        duration: 600
 
     # Kill python if it's still running, ignoring any errors
     - name: Shut down API
       run: pgrep python3 | xargs kill || true; sleep 5
-
-    # coverage report
-    # - name: coverage
-    #   run: |
-    #     # upload coverage report and source code to codecov
-    #     # get branch name
-    #     BRANCH=$(echo ${GITHUB_REF#refs/heads/})
-    #     echo "BRANCH=$BRANCH"
-    #     bash <(curl -s https://codecov.io/bash) -f coverage.xml -B $BRANCH
 
     # github codecov action
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2
       with:
         files: ./coverage.xml
-        flags: unittests
+        flags: Mayhem Tests
         name: codecov-umbrella
         fail_ci_if_error: true
 
