@@ -49,7 +49,9 @@ jobs:
     - name: coverage
       run: |
         # upload coverage report and source code to codecov
-        bash <(curl -s https://codecov.io/bash) -f coverage.xml
+        # get branch name
+        BRANCH=$(echo ${GITHUB_REF#refs/heads/})
+        bash <(curl -s https://codecov.io/bash) -f coverage.xml -B $BRANCH
 
     # Archive HTML report
     - name: Archive Mayhem for API report
