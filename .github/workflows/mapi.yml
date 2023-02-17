@@ -46,13 +46,22 @@ jobs:
       run: pgrep python3 | xargs kill || true; sleep 5
 
     # coverage report
-    - name: coverage
-      run: |
-        # upload coverage report and source code to codecov
-        # get branch name
-        BRANCH=$(echo ${GITHUB_REF#refs/heads/})
-        echo "BRANCH=$BRANCH"
-        bash <(curl -s https://codecov.io/bash) -f coverage.xml -B $BRANCH
+    # - name: coverage
+    #   run: |
+    #     # upload coverage report and source code to codecov
+    #     # get branch name
+    #     BRANCH=$(echo ${GITHUB_REF#refs/heads/})
+    #     echo "BRANCH=$BRANCH"
+    #     bash <(curl -s https://codecov.io/bash) -f coverage.xml -B $BRANCH
+
+    # github codecov action
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v2
+      with:
+        files: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: true
 
     # Archive HTML report
     - name: Archive Mayhem for API report
