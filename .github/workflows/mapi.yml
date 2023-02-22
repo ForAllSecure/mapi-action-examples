@@ -52,7 +52,7 @@ jobs:
       uses: codecov/codecov-action@v2
       with:
         files: .coverage
-        flags: Mayhem Tests
+        flags: mayhem
         name: codecov-umbrella
         fail_ci_if_error: true
 
