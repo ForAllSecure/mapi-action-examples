@@ -48,11 +48,11 @@ jobs:
 
     # github codecov action
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v2
+      uses: codecov/codecov-action@v3
       with:
         files: .coverage
-        flags: mayhem
-        name: codecov-umbrella
+        flags: vulnerability-tests
+        name: mayhem
         fail_ci_if_error: true
 
     # Archive HTML report
