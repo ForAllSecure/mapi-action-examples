@@ -46,12 +46,15 @@ jobs:
     - name: Shut down API
       run: pgrep coverage | xargs kill || true; sleep 5
 
+    # codecov action requires a coverage.xml file
+    - name: Generate coverage.xml
+      run: coverage xml
+
     - name: ls
       run: ls -lah
 
     # github codecov action
     - name: Upload coverage to Codecov
-      run: coverage xml
       uses: codecov/codecov-action@v3
       with:
         files: coverage.xml
