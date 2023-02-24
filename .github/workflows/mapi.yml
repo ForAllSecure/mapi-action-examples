@@ -46,6 +46,9 @@ jobs:
     - name: Shut down API
       run: pgrep coverage | xargs kill || true; sleep 5
 
+    - name: ls
+      run: ls -lah
+
     # github codecov action
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
