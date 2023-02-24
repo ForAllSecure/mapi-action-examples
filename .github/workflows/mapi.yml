@@ -50,9 +50,6 @@ jobs:
     - name: Generate coverage.xml
       run: coverage xml
 
-    - name: ls
-      run: ls -lah
-
     # github codecov action
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
