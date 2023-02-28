@@ -29,7 +29,7 @@ jobs:
     - name: Run API
       env:
         FASTAPI_ENV: test
-      run: uvicorn src.main:app &
+      run: coverage run -m uvicorn src.main:app &
 
     # Run Mayhem for API
     - name: Run Mayhem for API to check for vulnerabilities
@@ -44,7 +44,20 @@ jobs:
 
     # Kill python if it's still running, ignoring any errors
     - name: Shut down API
-      run: pgrep python3 | xargs kill || true
+      run: pgrep coverage | xargs kill || true; sleep 5
+
+    # codecov action requires a coverage.xml file
+    - name: Generate coverage.xml
+      run: coverage xml
+
+    # github codecov action
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: coverage.xml
+        flags: vulnerability-tests
+        name: mayhem
+        fail_ci_if_error: true
 
     # Archive HTML report
     - name: Archive Mayhem for API report
