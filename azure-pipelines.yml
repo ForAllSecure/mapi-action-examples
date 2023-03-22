@@ -1,0 +1,32 @@
+# You had to add a Library called "Mayhem for API Token" with a single secret called 'MAPI_TOKEN' for this pipeline to work.
+variables:
+- group: "Mayhem for API Token"
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script: pip install -r requirements.txt
+  displayName: 'Run Build'
+
+- script: FASTAPI_ENV=test python3 -m uvicorn src.main:app &
+  displayName: 'Start API'
+
+- script: |
+    curl -Lo mapi https://mayhem4api.forallsecure.com/downloads/cli/latest/linux-musl/mapi && chmod +x mapi
+    ./mapi login $(MAPI_TOKEN)
+    ./mapi run forallsecure-mapi-action-examples auto "http://localhost:8000/openapi.json" --url "http://localhost:8000/" --junit $(Build.ArtifactStagingDirectory)/junit.xml --sarif $(Build.ArtifactStagingDirectory)/mapi.sarif --html $(Build.ArtifactStagingDirectory)/mapi.html
+  displayName: 'Run Mayhem for API'
+
+- script: pgrep python3 | xargs kill || true
+  displayName: 'Stop API'
+
+- task: PublishBuildArtifacts@1
+  condition: always()
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'CodeAnalysisLogs'
+    publishLocation: 'Container'
