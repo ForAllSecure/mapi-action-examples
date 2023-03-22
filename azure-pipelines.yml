@@ -22,6 +22,7 @@ steps:
   displayName: 'Run Mayhem for API'
 
 - script: pgrep python3 | xargs kill || true
+  condition: always()
   displayName: 'Stop API'
 
 - task: PublishBuildArtifacts@1
