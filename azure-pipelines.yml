@@ -9,8 +9,15 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- script: pip install -r requirements.txt
-  displayName: 'Run Build'
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install dependencies'
+
+- script: |
+    pip install pytest pytest-azurepipelines
+    pytest
+  displayName: 'pytest'
 
 - script: FASTAPI_ENV=test python3 -m uvicorn src.main:app &
   displayName: 'Start API'
