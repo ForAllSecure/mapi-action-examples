@@ -3,7 +3,14 @@ variables:
 - group: "Mayhem for API Token"
 
 trigger:
-- main
+  branches:
+      include:
+      - main
+
+pr: 
+  branches:
+    include:
+    - main
 
 pool:
   vmImage: ubuntu-latest
@@ -64,10 +71,8 @@ steps:
     testResultsFormat: 'JUnit'
     testResultsFiles: '$(Build.ArtifactStagingDirectory)/junit.xml'
 
-# The next 3 tasks are for uploading coverage data from the fuzz job
-
 # codecov action requires a coverage.xml file
-- script: coverage xml -o $(Build.ArtifactStagingDirectory)/coverage.xml
+- script: coverage xml -o $(Build.ArtifactStagingDirectory)/fuzz-coverage.xml
   displayName: Generate coverage.xml
 
 # Required for PublishCodeCoverageResults
@@ -80,5 +85,5 @@ steps:
 - task: PublishCodeCoverageResults@1
   inputs:
     codeCoverageTool: Cobertura
-    summaryFileLocation: $(Build.ArtifactStagingDirectory)/coverage.xml # string. Required. Path to summary files. 
+    summaryFileLocation: $(Build.ArtifactStagingDirectory)/*-coverage.xml # string. Required. Path to summary files. 
     pathToSources: src/ # string. Path to Source files. 
