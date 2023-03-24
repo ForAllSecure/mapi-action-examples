@@ -1,0 +1,89 @@
+# You had to add a Library called "Mayhem for API Token" with a single secret called 'MAPI_TOKEN' for this pipeline to work.
+variables:
+- group: "Mayhem for API Token"
+
+trigger:
+  branches:
+      include:
+      - main
+
+pr: 
+  branches:
+    include:
+    - main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- checkout: self
+
+# Create environment to run API
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.8'
+  displayName: 'Set up and use Python 3.8'
+
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install dependencies'
+
+# Run unit tests
+- script: |
+    pip install pytest pytest-azurepipelines
+    pytest
+  displayName: 'pytest'
+
+# Run API in test mode. We configured test mode to output stacktraces in the error responses to improve the output of Mayhem for API.
+- script: coverage run -m uvicorn src.main:app &
+  env:
+      FASTAPI_ENV: test
+  displayName: 'Start API'
+
+# Run Mayhem for API
+- script: |
+    curl -Lo mapi https://mayhem4api.forallsecure.com/downloads/cli/latest/linux-musl/mapi \
+      && chmod +x mapi
+    ./mapi run forallsecure-mapi-action-examples auto http://localhost:8000/openapi.json \
+      --url 'http://localhost:8000' \
+      --sarif $(Build.ArtifactStagingDirectory)/mapi.sarif \
+      --junit $(Build.ArtifactStagingDirectory)/junit.xml \
+      --html $(Build.ArtifactStagingDirectory)/mapi.html
+  env:
+      MAPI_TOKEN: $(MAPI_TOKEN)
+  continueOnError: "true"
+  displayName: Run Mayhem for API to check for vulnerabilities
+
+- script: pgrep coverage | xargs kill || true; sleep 1
+  condition: always()
+  displayName: 'Stop API'
+
+# Requires installation of SARIF SAST Scans Tab (https://marketplace.visualstudio.com/items?itemName=sariftools.scans)
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'CodeAnalysisLogs'
+    publishLocation: 'Container'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '$(Build.ArtifactStagingDirectory)/junit.xml'
+
+# codecov action requires a coverage.xml file
+- script: coverage xml -o $(Build.ArtifactStagingDirectory)/fuzz-coverage.xml
+  displayName: Generate coverage.xml
+
+# Required for PublishCodeCoverageResults
+- task: UseDotNet@2
+  inputs:
+    version: 2.1.x
+
+# Publish code coverage results v2 has problems: https://github.com/microsoft/azure-pipelines-tasks/issues/17756
+# Publish any of the code coverage results from a build.
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: $(Build.ArtifactStagingDirectory)/*-coverage.xml # string. Required. Path to summary files. 
+    pathToSources: src/ # string. Path to Source files. 
