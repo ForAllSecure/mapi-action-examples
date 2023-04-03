@@ -1,2 +1,7 @@
+# dev
+uvicorn
 fastapi[all]
-coverage==7.1.0
+
+# test dependencies
+coverage[test]==7.1.0
+pytest[test]
