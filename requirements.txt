@@ -1,7 +1,8 @@
+# prod
+
 # dev
 uvicorn
-fastapi[all]
 
 # test dependencies
-coverage[test]==7.1.0
-pytest[test]
+coverage==7.1.0
+pytest==7.2.2
