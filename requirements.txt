@@ -1,4 +1,5 @@
 # prod
+fastapi[all]
 
 # dev
 uvicorn
