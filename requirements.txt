@@ -1,2 +1,9 @@
+# prod
 fastapi[all]
+
+# dev
+uvicorn
+
+# test dependencies
 coverage==7.1.0
+pytest-cov
