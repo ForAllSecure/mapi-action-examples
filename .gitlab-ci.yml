@@ -1,16 +1,4 @@
-build-job:
-  stage: build
-  script:
-    - pip install -r requirements.txt 
-
-test-job:
-  stage: test
-  script:
-    - coverage run -m uvicorn src.main:app &
-    - curl -Lo mapi https://mayhem4api.forallsecure.com/downloads/cli/latest/linux-musl/mapi && chmod +x mapi
-    - ./mapi login $MAPI_TOKEN
-    - ./mapi run forallsecure-mapi-action-examples auto "http://localhost:8000/openapi.json" --url "http://localhost:8000/" --junit junit.xml --sarif mapi.sarif --html mapi.html
-    # Kill python iimage: python:3.9
+image: python:3.9
 
 stages:
   - build
@@ -44,28 +32,6 @@ coverage-report:
   script:
     - coverage report
     - coverage xml
-    - coverage html -d coverage_html_report
-  artifacts:
-    when: always
-    paths:
-      - coverage_html_report/
-    reports:
-      cobertura: coverage.xml
-f it's still runner, ignoring any errors
-    - pgrep python3 | xargs kill || true
-  artifacts:
-    when: always
-    paths:
-      - junit.xml
-      - mapi.html
-      - mapi.sarif
-    reports:
-      junit: junit.xml
-
-coverage-report:
-  stage: test
-  script:
-    - coverage report
     - coverage html -d coverage_html_report
   artifacts:
     when: always
