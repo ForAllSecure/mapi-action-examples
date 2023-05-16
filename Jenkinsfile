@@ -14,7 +14,7 @@ pipeline {
             steps {
                 echo 'Scanning..'
                 sh '''
-                      FASTAPI_ENV=test python3 -m uvicorn src.main:app &
+                      FASTAPI_ENV=test coverage run -m uvicorn src.main:app &
                       curl -Lo mapi https://mayhem4api.forallsecure.com/downloads/cli/latest/linux-musl/mapi && chmod +x mapi
                    '''
                 withCredentials([string(credentialsId: 'MAPI_TOKEN', variable: 'MAPI_TOKEN')]) {

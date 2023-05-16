@@ -3,6 +3,7 @@ image: python:3.9
 stages:
   - build
   - test
+  - coverage
 
 build-job:
   stage: build
@@ -12,7 +13,7 @@ build-job:
 test-job:
   stage: test
   script:
-    - coverage run -m uvicorn src.main:app &
+    - FASTAPI_ENV=test coverage run -m uvicorn src.main:app &
     - curl -Lo mapi https://mayhem4api.forallsecure.com/downloads/cli/latest/linux-musl/mapi && chmod +x mapi
     - ./mapi login $MAPI_TOKEN
     - ./mapi run forallsecure/mapi-action-examples auto "http://localhost:8000/openapi.json" --url "http://localhost:8000/" --junit junit.xml --sarif mapi.sarif --html mapi.html
@@ -23,17 +24,22 @@ test-job:
       - junit.xml
       - mapi.html
       - mapi.sarif
+      - .coverage
     reports:
       junit: junit.xml
 
 coverage-report:
-  stage: test
+  stage: coverage
+  needs: ["test-job"]
   script:
+    - coverage combine  # Combine coverage data if there are multiple .coverage files
     - coverage report
     - coverage xml
     - coverage html -d coverage_html_report
   artifacts:
     when: always
+    paths:
+      - coverage_html_report/
     reports:
       coverage_report:
         coverage_format: cobertura
