@@ -4,6 +4,9 @@ cache:
   paths:
     - .cache/pip
 
+before_script:
+  - pip install --cache-dir .cache/pip -r requirements.txt
+
 stages:
   - build
   - test
