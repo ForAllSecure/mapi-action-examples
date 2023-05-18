@@ -6,22 +6,20 @@ cache:
 
 before_script:
   - pip install --cache-dir .cache/pip -r requirements.txt
-
-stages:
-  - build
-  - test
+  - echo "COVERAGE"
   - coverage
 
-build-job:
-  stage: build
-  script:
-    - pip install --cache-dir .cache/pip -r requirements.txt 
+stages:
+  - test
+  - coverage
 
 test-job:
   stage: test
   allow_failure: true
   script:
-    - FASTAPI_ENV=test coverage run -m uvicorn src.main:app &
+    - echo "COVERAGE
+    - coverage"
+    - FASTAPI_ENV=test coverage run -m uvicorn src.main:app
     - curl -Lo mapi https://mayhem4api.forallsecure.com/downloads/cli/latest/linux-musl/mapi && chmod +x mapi
     - ./mapi login $MAPI_TOKEN
     - ./mapi run forallsecure/mapi-action-examples auto "http://localhost:8000/openapi.json" --url "http://localhost:8000/" --junit junit.xml --sarif mapi.sarif --html mapi.html
