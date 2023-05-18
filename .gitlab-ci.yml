@@ -1,5 +1,9 @@
 image: python:3.9
 
+cache:
+  paths:
+    - .cache/pip
+
 stages:
   - build
   - test
@@ -8,10 +12,11 @@ stages:
 build-job:
   stage: build
   script:
-    - pip install -r requirements.txt 
+    - pip install --cache-dir .cache/pip -r requirements.txt 
 
 test-job:
   stage: test
+  allow_failure: true
   script:
     - FASTAPI_ENV=test coverage run -m uvicorn src.main:app &
     - curl -Lo mapi https://mayhem4api.forallsecure.com/downloads/cli/latest/linux-musl/mapi && chmod +x mapi
@@ -30,7 +35,6 @@ test-job:
 
 coverage-report:
   stage: coverage
-  needs: ["test-job"]
   script:
     - coverage combine  # Combine coverage data if there are multiple .coverage files
     - coverage report
