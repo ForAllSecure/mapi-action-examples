@@ -6,8 +6,6 @@ cache:
 
 before_script:
   - pip install --cache-dir .cache/pip -r requirements.txt
-  - echo "COVERAGE"
-  - coverage
 
 stages:
   - test
@@ -17,9 +15,7 @@ test-job:
   stage: test
   allow_failure: true
   script:
-    - echo "COVERAGE
-    - coverage"
-    - FASTAPI_ENV=test coverage run -m uvicorn src.main:app
+    - FASTAPI_ENV=test python3 -m coverage run -m uvicorn src.main:app
     - curl -Lo mapi https://mayhem4api.forallsecure.com/downloads/cli/latest/linux-musl/mapi && chmod +x mapi
     - ./mapi login $MAPI_TOKEN
     - ./mapi run forallsecure/mapi-action-examples auto "http://localhost:8000/openapi.json" --url "http://localhost:8000/" --junit junit.xml --sarif mapi.sarif --html mapi.html
@@ -37,10 +33,10 @@ test-job:
 coverage-report:
   stage: coverage
   script:
-    - coverage combine  # Combine coverage data if there are multiple .coverage files
-    - coverage report
-    - coverage xml
-    - coverage html -d coverage_html_report
+    - python3 -m coverage combine  # Combine coverage data if there are multiple .coverage files
+    - python3 -m coverage report
+    - python3 -m coverage xml
+    - python3 -m coverage html -d coverage_html_report
   artifacts:
     when: always
     paths:

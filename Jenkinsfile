@@ -6,10 +6,7 @@ pipeline {
             steps {
                 echo 'Building..'
                 sh '''
-                      export PATH=$PATH:/var/jenkins_home/.local/bin
                       pip install -r requirements.txt 
-                      echo "COVERAGE"
-                      coverage
                    '''
             }
         }
@@ -17,10 +14,7 @@ pipeline {
             steps {
                 echo 'Scanning..'
                 sh '''
-                      echo "COVERAGE"
-                      coverage
-                      FASTAPI_ENV=test coverage run -m uvicorn src.main:app
-                      coverage xml -o coverage.xml
+                      FASTAPI_ENV=test python3 -m coverage run -m uvicorn src.main:app
                       curl -Lo mapi https://mayhem4api.forallsecure.com/downloads/cli/latest/linux-musl/mapi && chmod +x mapi
                    '''
                 withCredentials([string(credentialsId: 'MAPI_TOKEN', variable: 'MAPI_TOKEN')]) {
@@ -31,6 +25,10 @@ pipeline {
                    '''
                 /* Kill python if it's still running, ignoring any errors */
                 sh 'pgrep python3 | xargs kill || true'
+
+                /* Generate coverage report */
+                sh 'python3 -m coverage xml -o coverage.xml'
+
             }
             post {
                 always {
