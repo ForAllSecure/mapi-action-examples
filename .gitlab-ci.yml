@@ -3,6 +3,7 @@ image: python:3.9
 cache:
   paths:
     - .cache/pip
+    - .coverage
 
 before_script:
   - pip install --cache-dir .cache/pip -r requirements.txt
@@ -26,14 +27,12 @@ test-job:
       - junit.xml
       - mapi.html
       - mapi.sarif
-      - .coverage
     reports:
       junit: junit.xml
 
 coverage-report:
   stage: coverage
   script:
-    - python3 -m coverage combine  # Combine coverage data if there are multiple .coverage files
     - python3 -m coverage report
     - python3 -m coverage xml
     - python3 -m coverage html -d coverage_html_report
