@@ -25,6 +25,9 @@ pipeline {
                         sh '''
                               ./mapi run forallsecure/mapi-action-examples auto "http://localhost:8000/openapi.json" --url "http://localhost:8000/" --junit junit.xml --sarif mapi.sarif --html mapi.html
                            '''
+
+                        error('This build is intentionally marked as failed for testing.')
+
                     } catch(Exception e) {
                         echo 'Exception occurred: ' + e.getMessage()
                         currentBuild.result = 'FAILURE'
