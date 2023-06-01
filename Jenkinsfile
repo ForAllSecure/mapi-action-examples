@@ -54,6 +54,7 @@ pipeline {
                 fingerprint: true,
                 onlyIfSuccessful: false
             junit 'junit.xml'
+            cobertura coberturaReportFile: 'coverage.xml'
             script {
                 currentBuild.result = 'SUCCESS'
             }
