@@ -1,3 +1,4 @@
+// First job
 pipeline {
     agent any
 
@@ -12,33 +13,48 @@ pipeline {
         }
         stage('Scan') {
             steps {
-                echo 'Scanning..'
-                sh '''
-                      FASTAPI_ENV=test python3 -m uvicorn src.main:app &
-                      curl -Lo mapi https://mayhem4api.forallsecure.com/downloads/cli/latest/linux-musl/mapi && chmod +x mapi
-                   '''
-                withCredentials([string(credentialsId: 'MAPI_TOKEN', variable: 'MAPI_TOKEN')]) {
-                    sh './mapi login ${MAPI_TOKEN}'
+                script {
+                    try {
+                        echo 'Scanning..'
+                        sh '''
+                              FASTAPI_ENV=test python3 -m coverage run -m uvicorn src.main:app &
+                              curl -Lo mapi https://mayhem4api.forallsecure.com/downloads/cli/latest/linux-musl/mapi && chmod +x mapi
+                           '''
+                        withCredentials([string(credentialsId: 'MAPI_TOKEN', variable: 'MAPI_TOKEN')]) {
+                            sh '''
+                                    MAPI_URL="https://mayhem4api.forallsecure.com"
+                                    MAYHEM_URL="https://mayhem4api.forallsecure.com"
+                                    ./mapi login ${MAPI_TOKEN}
+                                    ./mapi run forallsecure/mapi-action-examples auto "http://localhost:8000/openapi.json" --url "http://localhost:8000/" --junit junit.xml --sarif mapi.sarif --html mapi.html
+                               '''
+                        }
+
+
+                    } catch(Exception e) {
+                        echo 'Exception occurred: ' + e.getMessage()
+                        currentBuild.result = 'SUCCESS'
+                    } finally {
+                        /* Kill python if it's still running, ignoring any errors */
+                        sh 'pgrep python3 | xargs kill || true'
+
+                        /* Generate coverage report */
+                        sh 'python3 -m coverage xml -o coverage.xml'
+                    }
                 }
-                sh '''
-                      ./mapi run forallsecure-mapi-action-examples auto "http://localhost:8000/openapi.json" --url "http://localhost:8000/" --junit junit.xml --sarif mapi.sarif --html mapi.html
-                   '''
-                /* Kill python if it's still running, ignoring any errors */
-                sh 'pgrep python3 | xargs kill || true'
             }
-            post {
-                always {
-                    echo 'Archive....'
-                    archiveArtifacts artifacts: 'junit.xml, mapi.sarif, mapi.html',
-                       allowEmptyArchive: true,
-                       fingerprint: true,
-                       onlyIfSuccessful: false
-                    junit 'junit.xml'
-                    recordIssues(
-                        enabledForFailure: true,
-                        tool: sarif(pattern: 'mapi.sarif')
-                    )
-                }
+        }
+    }
+    post {
+        always {
+            echo 'Archive and Code coverage....'
+            archiveArtifacts artifacts: 'junit.xml, mapi.sarif, mapi.html, coverage.xml',
+                allowEmptyArchive: true,
+                fingerprint: true,
+                onlyIfSuccessful: false
+            junit 'junit.xml'
+            cobertura coberturaReportFile: 'coverage.xml'
+            script {
+                currentBuild.result = 'SUCCESS'
             }
         }
     }

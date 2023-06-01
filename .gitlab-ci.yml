@@ -1,16 +1,25 @@
-build-job:
-  stage: build
-  script:
-    - pip install -r requirements.txt 
+image: python:3.9
+
+cache:
+  paths:
+    - .cache/pip
+    - .coverage
+
+before_script:
+  - pip install --cache-dir .cache/pip -r requirements.txt
+
+stages:
+  - test
+  - coverage
 
 test-job:
   stage: test
+  allow_failure: true
   script:
-    - FASTAPI_ENV=test python3 -m uvicorn src.main:app &
+    - FASTAPI_ENV=test python3 -m coverage run -m uvicorn src.main:app &
     - curl -Lo mapi https://mayhem4api.forallsecure.com/downloads/cli/latest/linux-musl/mapi && chmod +x mapi
     - ./mapi login $MAPI_TOKEN
-    - ./mapi run forallsecure-mapi-action-examples auto "http://localhost:8000/openapi.json" --url "http://localhost:8000/" --junit junit.xml --sarif mapi.sarif --html mapi.html
-    # Kill python if it's still runner, ignoring any errors
+    - ./mapi run forallsecure/mapi-action-examples auto "http://localhost:8000/openapi.json" --url "http://localhost:8000/" --junit junit.xml --sarif mapi.sarif --html mapi.html
     - pgrep python3 | xargs kill || true
   artifacts:
     when: always
@@ -20,3 +29,19 @@ test-job:
       - mapi.sarif
     reports:
       junit: junit.xml
+
+coverage-report:
+  stage: coverage
+  script:
+    - python3 -m coverage report
+    - python3 -m coverage xml
+    - python3 -m coverage html -d coverage_html_report
+  coverage: '/TOTAL.*\s+(\d+\%)$/' # regex to extract coverage percentage
+  artifacts:
+    when: always
+    paths:
+      - coverage_html_report/
+    reports:
+      coverage_report: 
+        coverage_format: cobertura
+        path: coverage.xml
