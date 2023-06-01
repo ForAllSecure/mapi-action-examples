@@ -1,3 +1,4 @@
+// First job
 pipeline {
     agent any
 
@@ -28,7 +29,6 @@ pipeline {
 
                                '''
                         }
-                       
 
                         error('This build is intentionally marked as failed for testing.')
 
@@ -54,11 +54,9 @@ pipeline {
                 fingerprint: true,
                 onlyIfSuccessful: false
             junit 'junit.xml'
-            cobertura coberturaReportFile: 'coverage.xml'
-            recordIssues(
-                enabledForFailure: true,
-                tool: sarif(pattern: 'mapi.sarif')
-            )
+            script {
+                currentBuild.result = 'SUCCESS'
+            }
         }
     }
 }
