@@ -17,17 +17,18 @@ pipeline {
                         echo 'Scanning..'
                         sh '''
                               FASTAPI_ENV=test python3 -m coverage run -m uvicorn src.main:app &
-                              curl -Lo mapi https://mayhem4api.forallsecure.com/downloads/cli/latest/linux-musl/mapi && chmod +x mapi
+                              curl -Lo mapi https://mayhem4api.forallsecure.com/downloads/cli/latest/linux-musl/mapi 
+                              chmod +x mapi
+                              mkdir -p/usr/local/bin/
+                              install mapi /usr/local/bin  
                            '''
                         withCredentials([string(credentialsId: 'MAPI_TOKEN', variable: 'MAPI_TOKEN')]) {
                             sh '''
-                                  unset MAYHEM_URL
-                                  MAPI_URL=https://mayhem4api.forallsecure.com
-                                  ./mapi login ${MAPI_TOKEN}
+                                    mapi login ${MAPI_TOKEN}
                                '''
                         }
                         sh '''
-                              ./mapi run forallsecure/mapi-action-examples auto "http://localhost:8000/openapi.json" --url "http://localhost:8000/" --junit junit.xml --sarif mapi.sarif --html mapi.html
+                                mapi run forallsecure/mapi-action-examples auto "http://localhost:8000/openapi.json" --url "http://localhost:8000/" --junit junit.xml --sarif mapi.sarif --html mapi.html
                            '''
 
                         error('This build is intentionally marked as failed for testing.')
