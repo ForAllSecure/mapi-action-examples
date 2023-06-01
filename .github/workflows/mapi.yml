@@ -51,7 +51,7 @@ jobs:
         api-spec: http://localhost:8000/openapi.json
         sarif-report: mapi.sarif
         html-report: mapi.html
-        target: forallsecure/sales-engineering-demo/mapi-action-examples
+        target: "forallsecure/sales-engineering-demo/mapi-action-examples"
 
     # Kill python if it's still running, ignoring any errors
     - name: Shut down API
