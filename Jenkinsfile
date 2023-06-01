@@ -23,7 +23,6 @@ pipeline {
                         withCredentials([string(credentialsId: 'MAPI_TOKEN', variable: 'MAPI_TOKEN')]) {
                             sh '''
                                     MAPI_URL="https://mayhem4api.forallsecure.com"
-                                    MAYHEM_URL="https://mayhem4api.forallsecure.com"
                                     ./mapi login ${MAPI_TOKEN}
                                     ./mapi run forallsecure/mapi-action-examples auto "http://localhost:8000/openapi.json" --url "http://localhost:8000/" --junit junit.xml --sarif mapi.sarif --html mapi.html
 
