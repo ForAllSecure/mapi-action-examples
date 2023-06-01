@@ -44,21 +44,21 @@ pipeline {
                     }
                 }
             }
-            post {
-                always {
-                    echo 'Archive and Code coverage....'
-                    archiveArtifacts artifacts: 'junit.xml, mapi.sarif, mapi.html, coverage.xml',
-                       allowEmptyArchive: true,
-                       fingerprint: true,
-                       onlyIfSuccessful: false
-                    junit 'junit.xml'
-                    cobertura coberturaReportFile: 'coverage.xml'
-                    recordIssues(
-                        enabledForFailure: true,
-                        tool: sarif(pattern: 'mapi.sarif')
-                    )
-                }
-            }
+        }
+    }
+    post {
+        always {
+            echo 'Archive and Code coverage....'
+            archiveArtifacts artifacts: 'junit.xml, mapi.sarif, mapi.html, coverage.xml',
+                allowEmptyArchive: true,
+                fingerprint: true,
+                onlyIfSuccessful: false
+            junit 'junit.xml'
+            cobertura coberturaReportFile: 'coverage.xml'
+            recordIssues(
+                enabledForFailure: true,
+                tool: sarif(pattern: 'mapi.sarif')
+            )
         }
     }
 }
