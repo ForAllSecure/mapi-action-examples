@@ -43,9 +43,9 @@ steps:
 
 # Run Mayhem for API
 - script: |
-    curl -Lo mapi https://mayhem4api.forallsecure.com/downloads/cli/latest/linux-musl/mapi \
+    curl -Lo mapi $MAPI_URL/downloads/cli/latest/linux-musl/mapi \
       && chmod +x mapi
-    ./mapi run forallsecure-mapi-action-examples auto http://localhost:8000/openapi.json \
+    ./mapi run forallsecure/mapi-action-examples/fastapi auto http://localhost:8000/openapi.json \
       --url 'http://localhost:8000' \
       --sarif $(Build.ArtifactStagingDirectory)/mapi.sarif \
       --junit $(Build.ArtifactStagingDirectory)/junit.xml \
