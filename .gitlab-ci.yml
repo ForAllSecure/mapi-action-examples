@@ -17,7 +17,7 @@ test-job:
   allow_failure: true
   script:
     - FASTAPI_ENV=test python3 -m coverage run -m uvicorn src.main:app &
-    - curl -Lo mapi $MAPI_URL/cli/mapi/linux-musl/latest/mapi && chmod +x mapi
+    - curl -Lo mapi $MAYHEM_URL/cli/mapi/linux-musl/latest/mapi && chmod +x mapi
     - ./mapi login $MAPI_TOKEN
     - ./mapi run forallsecure/mapi-action-examples/fastapi auto "http://localhost:8000/openapi.json" --url "http://localhost:8000/" --junit junit.xml --sarif mapi.sarif --html mapi.html
     - pgrep python3 | xargs kill || true
