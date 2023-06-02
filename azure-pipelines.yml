@@ -1,4 +1,4 @@
-# You had to add a Library called "Mayhem for API Token" with a secret called 'MAPI_TOKEN' and secret called 'MAPI_URL' (or an environment variable) for this pipeline to work.
+# You had to add a Library called "Mayhem for API Token" with a secret called 'MAPI_TOKEN' and secret called 'MAYHEM_URL' (or an environment variable) for this pipeline to work.
 variables:
 - group: "Mayhem for API Token"
 
@@ -51,7 +51,7 @@ steps:
       --html $(Build.ArtifactStagingDirectory)/mapi.html
   env:
       MAPI_TOKEN: $(MAPI_TOKEN)
-      MAPI_URL: $(MAPI_URL)
+      MAYHEM_URL: $(MAYHEM_URL)
   continueOnError: "true"
   displayName: Run Mayhem for API to check for vulnerabilities
 
