@@ -43,7 +43,7 @@ steps:
 
 # Run Mayhem for API
 - script: |
-    curl -Lo mapi $MAPI_URL/cli/mapi/linux-musl/latest/mapi && chmod +x mapi
+    curl -Lo mapi $MAYHEM_URL/cli/mapi/linux-musl/latest/mapi && chmod +x mapi
     ./mapi run forallsecure/mapi-action-examples/fastapi auto http://localhost:8000/openapi.json \
       --url 'http://localhost:8000' \
       --sarif $(Build.ArtifactStagingDirectory)/mapi.sarif \
