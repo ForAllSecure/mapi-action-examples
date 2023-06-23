@@ -19,7 +19,7 @@ our job easier!
 and PRs. We make it easy, and provide results right in your PRs where
 you want them. Adding Mayhem for API to a DevOps pipeline is easy.
 
-Want to try it? [Sign up for free](http://mayhem4api.forallsecure.com/signup)!
+Want to try it? [Sign up for free](https://app.mayhem.security)!
 
 ## Example GitHub Actions Integration
 
@@ -44,9 +44,9 @@ In GitHub actions, those steps translate to:
 
     # Run Mayhem for API
     - name: Run Mayhem for API to check for vulnerabilities
-      uses: ForAllSecure/mapi-action@v1
+      uses: ForAllSecure/mapi-action@v2
       with:
-        mapi-token: ${{ secrets.MAPI_TOKEN }}
+        mayhem-token: ${{ secrets.MAYHEM_TOKEN }}
         api-url: http://localhost:8000
         api-spec: http://localhost:8000/openapi.json
 ```
@@ -69,10 +69,10 @@ To artifact the report in your build, add this step to your pipeline:
 
 ```yaml
 - name: Run Mayhem for API to check for vulnerabilities
-  uses: ForAllSecure/mapi-action@v1
+  uses: ForAllSecure/mapi-action@v2
   continue-on-error: true
   with:
-    mapi-token: ${{ secrets.MAPI_TOKEN }}
+    mayhem-token: ${{ secrets.MAYHEM_TOKEN }}
     api-url: http://localhost:8000 # <- update this
     api-spec: your-openapi-spec-or-postman-collection.json # <- update this
     html-report: mapi.html
@@ -98,10 +98,10 @@ step to your pipeline:
 
 ```yaml
 - name: Run Mayhem for API to check for vulnerabilities
-  uses: ForAllSecure/mapi-action@v1
+  uses: ForAllSecure/mapi-action@v2
   continue-on-error: true
   with:
-    mapi-token: ${{ secrets.MAPI_TOKEN }}
+    mayhem-token: ${{ secrets.MAYHEM_TOKEN }}
     api-url: http://localhost:8000 # <- update this
     api-spec: your-openapi-spec-or-postman-collection.json # <- update this
     sarif-report: mapi.sarif
