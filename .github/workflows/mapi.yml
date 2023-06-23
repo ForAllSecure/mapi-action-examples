@@ -36,7 +36,7 @@ jobs:
 
     # Run Mayhem for API
     - name: Run Mayhem for API to check for vulnerabilities
-      uses: ForAllSecure/mapi-action@app-mayhem-security
+      uses: ForAllSecure/mapi-action@v2
       continue-on-error: true
       with:
         mayhem-token: ${{ secrets.MAYHEM_TOKEN }}
