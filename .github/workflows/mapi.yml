@@ -27,6 +27,13 @@ jobs:
     - name: Run unit tests
       run: py.test --cov=./ --cov-report=xml
 
+    - name: Upload unit test coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: coverage.xml
+        flags: unit-tests
+        fail_ci_if_error: true
+
     # Run API in test mode. We configured test mode to output stacktraces in
     # the error responses to improve the output of Mayhem for API.
     - name: Run API
@@ -53,6 +60,14 @@ jobs:
     # codecov action requires a coverage.xml file
     - name: Generate coverage.xml
       run: coverage xml
+
+    - name: Upload Mayhem coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: coverage.xml
+        flags: vulnerability-tests
+        name: mayhem
+        fail_ci_if_error: true
 
     # Archive HTML report
     - name: Archive Mayhem for API report
