@@ -43,11 +43,10 @@ jobs:
 
     # Run Mayhem for API
     - name: Run Mayhem for API to check for vulnerabilities
-      uses: ForAllSecure/mapi-action@v1
+      uses: ForAllSecure/mapi-action@v2
       continue-on-error: true
       with:
-        mapi-token: ${{ secrets.MAPI_TOKEN }}
-        mapi-url: ${{ secrets.MAYHEM_URL }}
+        mayhem-token: ${{ secrets.MAYHEM_TOKEN }}
         api-url: http://localhost:8000
         api-spec: http://localhost:8000/openapi.json
         sarif-report: mapi.sarif
