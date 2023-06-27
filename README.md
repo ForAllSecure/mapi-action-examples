@@ -19,7 +19,7 @@ our job easier!
 and PRs. We make it easy, and provide results right in your PRs where
 you want them. Adding Mayhem for API to a DevOps pipeline is easy.
 
-Want to try it? [Sign up for free](https://app.mayhem.security)!
+Want to try it? [Get started for free!](https://www.mayhem.security/get-started)!
 
 ## Example GitHub Actions Integration
 
