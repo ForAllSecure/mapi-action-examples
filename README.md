@@ -46,6 +46,7 @@ In GitHub actions, those steps translate to:
     - name: Run Mayhem for API to check for vulnerabilities
       uses: ForAllSecure/mapi-action@v2
       with:
+        mayhem-url: https://app.mayhem.security
         mayhem-token: ${{ secrets.MAYHEM_TOKEN }}
         api-url: http://localhost:8000
         api-spec: http://localhost:8000/openapi.json
@@ -72,6 +73,7 @@ To artifact the report in your build, add this step to your pipeline:
   uses: ForAllSecure/mapi-action@v2
   continue-on-error: true
   with:
+    mayhem-url: https://app.mayhem.security
     mayhem-token: ${{ secrets.MAYHEM_TOKEN }}
     api-url: http://localhost:8000 # <- update this
     api-spec: your-openapi-spec-or-postman-collection.json # <- update this
@@ -101,6 +103,7 @@ step to your pipeline:
   uses: ForAllSecure/mapi-action@v2
   continue-on-error: true
   with:
+    mayhem-url: https://app.mayhem.security
     mayhem-token: ${{ secrets.MAYHEM_TOKEN }}
     api-url: http://localhost:8000 # <- update this
     api-spec: your-openapi-spec-or-postman-collection.json # <- update this
