@@ -78,7 +78,7 @@ steps:
 # Required for PublishCodeCoverageResults
 - task: UseDotNet@2
   inputs:
-    version: 2.1.x
+    version: 3.1.x
 
 # Publish code coverage results v2 has problems: https://github.com/microsoft/azure-pipelines-tasks/issues/17756
 # Publish any of the code coverage results from a build.
