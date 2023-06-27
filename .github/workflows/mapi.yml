@@ -46,8 +46,8 @@ jobs:
       uses: ForAllSecure/mapi-action@v2
       continue-on-error: true
       with:
-        mayhem-token: ${{ secrets.MAYHEM_TOKEN }}
         mayhem-url: https://app.mayhem.security
+        mayhem-token: ${{ secrets.MAYHEM_TOKEN }}
         api-url: http://localhost:8000
         api-spec: http://localhost:8000/openapi.json
         sarif-report: mapi.sarif
