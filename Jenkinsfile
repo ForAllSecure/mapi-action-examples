@@ -35,7 +35,7 @@ pipeline {
                         }
                     } finally {
                         /* Kill python if it's still running, ignoring any errors */
-                        sh 'pgrep python | xargs kill || true'
+                        sh 'pgrep python3 | xargs kill || true'
 
                         /* Generate coverage report */
                         sh 'python3 -m coverage xml -o coverage.xml'
