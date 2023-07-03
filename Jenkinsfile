@@ -53,7 +53,7 @@ pipeline {
                 onlyIfSuccessful: false
             junit 'junit.xml'
             recordIssues(enabledForFailure: true,
-                         tool: sarif(pattern: 'mapi.sarif')
+                         tool: sarif(pattern: 'mapi.sarif'))
             cobertura coberturaReportFile: 'coverage.xml', onlyStable: 'false'
         }
     }
