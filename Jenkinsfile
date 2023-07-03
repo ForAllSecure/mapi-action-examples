@@ -52,6 +52,8 @@ pipeline {
                 fingerprint: true,
                 onlyIfSuccessful: false
             junit 'junit.xml'
+            recordIssues(enabledForFailure: true,
+                         tool: sarif(pattern: 'mapi.sarif')
             cobertura coberturaReportFile: 'coverage.xml', onlyStable: 'false'
         }
     }
