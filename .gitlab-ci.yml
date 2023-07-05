@@ -14,7 +14,6 @@ stages:
 
 test-job:
   stage: test
-  allow_failure: true
   script:
     - FASTAPI_ENV=test python3 -m coverage run -m uvicorn src.main:app &
     - curl -Lo mapi $MAYHEM_URL/cli/mapi/linux-musl/latest/mapi && chmod +x mapi
@@ -32,6 +31,7 @@ test-job:
 
 coverage-report:
   stage: coverage
+  when: always
   script:
     - python3 -m coverage report
     - python3 -m coverage xml
