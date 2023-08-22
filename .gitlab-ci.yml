@@ -10,7 +10,6 @@ before_script:
 
 stages:
   - test
-  - coverage
 
 test-job:
   stage: test
@@ -20,19 +19,6 @@ test-job:
     - ./mapi login $MAPI_TOKEN
     - ./mapi run forallsecure-demo/mapi-action-examples/fastapi auto "http://localhost:8000/openapi.json" --url "http://localhost:8000/" --junit junit.xml --sarif mapi.sarif --html mapi.html
     - pgrep python3 | xargs kill || true
-  artifacts:
-    when: always
-    paths:
-      - junit.xml
-      - mapi.html
-      - mapi.sarif
-    reports:
-      junit: junit.xml
-
-coverage-report:
-  stage: coverage
-  when: always
-  script:
     - python3 -m coverage report
     - python3 -m coverage xml
     - python3 -m coverage html -d coverage_html_report
@@ -40,8 +26,13 @@ coverage-report:
   artifacts:
     when: always
     paths:
+      - junit.xml
+      - mapi.html
+      - mapi.sarif
+      - coverage.xml
       - coverage_html_report/
     reports:
+      junit: junit.xml
       coverage_report: 
         coverage_format: cobertura
         path: coverage.xml
