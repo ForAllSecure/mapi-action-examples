@@ -18,7 +18,7 @@ test-job:
     - curl -Lo mapi $MAYHEM_URL/cli/mapi/linux-musl/latest/mapi && chmod +x mapi
     - ./mapi login $MAPI_TOKEN
     - ./mapi run forallsecure-demo/mapi-action-examples/fastapi auto "http://localhost:8000/openapi.json" --url "http://localhost:8000/" --junit junit.xml --sarif mapi.sarif --html mapi.html
-    - pgrep python3 | xargs kill || true
+    - pgrep python3 | xargs kill || true; sleep 1
     - python3 -m coverage report
     - python3 -m coverage xml
     - python3 -m coverage html -d coverage_html_report
