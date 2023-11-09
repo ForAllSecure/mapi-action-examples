@@ -1,6 +1,6 @@
 # Mayhem for API: Example CI integration
 
-[![Mayhem for API](./imgs/mayhem-logo.svg)](https://www.mayhem.security/get-started)
+<img src="./imgs/mayhem-logo.svg" alt="Mayhem for API" title="Mayhem for API" width="100%"/>
 
 ## About Mayhem for API
 
