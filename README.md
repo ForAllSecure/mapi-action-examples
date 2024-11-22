@@ -79,7 +79,7 @@ To artifact the report in your build, add this step to your pipeline:
 
 # Archive HTML report
 - name: Archive Mayhem for API report
-  uses: actions/upload-artifact@v3
+  uses: actions/upload-artifact@v4
   with:
     name: mapi-report
     path: mapi.html
