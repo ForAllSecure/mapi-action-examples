@@ -3,4 +3,5 @@ docker
 docker-pipeline
 warnings
 junit
+coverage
 credentials

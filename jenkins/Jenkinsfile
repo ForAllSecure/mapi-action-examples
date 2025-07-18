@@ -1,12 +1,19 @@
 // First job
 pipeline {
-    agent any
+    agent {
+        docker { image 'python:3.9' }
+    }
+    
+    environment {
+        MAYHEM_URL = 'https://app.mayhem.security'
+    }
 
     stages {
         stage('Build') {
             steps {
                 echo 'Building..'
                 sh '''
+                      cd /workspace
                       pip install -r requirements.txt 
                    '''
             }
@@ -38,7 +45,7 @@ pipeline {
                         sh 'pgrep python3 | xargs kill || true'
 
                         /* Generate coverage report */
-                        sh 'python3 -m coverage xml -o coverage.xml'
+                        sh 'python3 -m coverage xml -o coverage.xml || true'
                     }
                 }
             }
@@ -54,7 +61,8 @@ pipeline {
             junit 'junit.xml'
             recordIssues(enabledForFailure: true,
                          tool: sarif(pattern: 'mapi.sarif'))
-            cobertura coberturaReportFile: 'coverage.xml', onlyStable: 'false'
+            recordCoverage(tools: [[parser: 'COBERTURA', pattern: 'coverage.xml']], 
+                         sourceCodeRetention: 'LAST_BUILD')
         }
     }
 }
