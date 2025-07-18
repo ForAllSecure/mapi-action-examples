@@ -27,9 +27,9 @@ pipeline {
                         sh '''
                               curl -Lo mapi ${MAYHEM_URL}/cli/mapi/linux-musl/latest/mapi && chmod +x mapi
                            '''
-                        withCredentials([string(credentialsId: 'MAPI_TOKEN', variable: 'MAPI_TOKEN')]) {
+                        withCredentials([string(credentialsId: 'MAYHEM_TOKEN', variable: 'MAYHEM_TOKEN')]) {
                             sh '''
-                                    ./mapi login ${MAPI_TOKEN}
+                                    ./mapi login ${MAYHEM_TOKEN}
                                     ./mapi run forallsecure-demo/mapi-action-examples/fastapi auto "http://localhost:8000/openapi.json" --url "http://localhost:8000/" --junit junit.xml --sarif mapi.sarif --html mapi.html
                                '''
                         }

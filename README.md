@@ -117,3 +117,9 @@ If your API server sends back stacktraces in the 500 Internal Server
 Error (only do this in a test environment -- never in production!),
 Mayhem for API will try to map issues it finds to the exact line of code
 that triggered the issue.
+
+## Example runs
+
+- Github: see [this repo.](https://github.com/ForAllSecure/mapi-action-examples/actions/workflows/mapi.yml)
+- Gitlab: see [https://gitlab.com/mayhem-forallsecure/mayhem-demo/-/jobs/10201916810](https://gitlab.com/mayhem-forallsecure/mayhem-demo/-/jobs/10201916810)
+- Jenkins: see [this repo.](https://github.com/ForAllSecure/mapi-action-examples/actions/workflows/jenkins.yml)
