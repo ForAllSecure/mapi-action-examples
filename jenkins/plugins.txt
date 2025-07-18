@@ -1,4 +1,6 @@
 git
 docker
+docker-pipeline
+warnings
 junit
 credentials
