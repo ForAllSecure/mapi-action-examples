@@ -1,5 +1,11 @@
 name: 'Mayhem for API on Jenkins'
-on: workflow_dispatch
+on: 
+  push:
+    branches: [ main, jenkins-example ]
+  pull_request:
+    branches: [ main, jenkins-example ]
+  workflow_dispatch
+
 
 
 
