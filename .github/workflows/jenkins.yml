@@ -10,13 +10,13 @@ on:
 
 jobs:
   jenkins-container-pipeline:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     container:
       image: ghcr.io/jenkinsci/jenkinsfile-runner:master
 
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: 'Run Jenkins job'
         uses:
           jenkinsci/jfr-container-action@master
