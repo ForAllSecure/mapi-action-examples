@@ -4,10 +4,7 @@ on:
     branches: [ main, jenkins-example ]
   pull_request:
     branches: [ main, jenkins-example ]
-  workflow_dispatch
-
-
-
+  workflow_dispatch:
 
 jobs:
   jenkins-container-pipeline:
