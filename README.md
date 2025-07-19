@@ -122,4 +122,4 @@ that triggered the issue.
 
 - Github: see [this repo.](https://github.com/ForAllSecure/mapi-action-examples/actions/workflows/mapi.yml)
 - Gitlab: see [https://gitlab.com/mayhem-forallsecure/mayhem-demo/-/jobs/10201916810](https://gitlab.com/mayhem-forallsecure/mayhem-demo/-/jobs/10201916810)
-- Jenkins: see [this repo.](https://github.com/ForAllSecure/mapi-action-examples/actions/workflows/jenkins.yml)
+- Jenkins: copy the existing [Jenkinsfile](https://github.com/ForAllSecure/mapi-action-examples/blob/jenkins-example/jenkins/Jenkinsfile) into a new pipeline configuration and run the pipeline. Make sure to install the [plugins](https://github.com/ForAllSecure/mapi-action-examples/blob/jenkins-example/jenkins/plugins.txt)
